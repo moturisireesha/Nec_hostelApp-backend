@@ -54,15 +54,28 @@ exports.approveRequest = async (req, res) => {
         );
         const teluguName = teluguNameResponse.data.responseData.translatedText;
 
-        const variables = [
-          gender + " " + teluguName,
-          formatDate.formatDate(updatedRequest.date || updatedRequest.fromDate),
-          formatDate.formatTime(updatedRequest.fromTime),
-          formatDate.formatDate(updatedRequest.date || updatedRequest.toDate),
-          formatDate.formatTime(updatedRequest.toTime),
-          updatedRequest.type === "PERMISSION" ? "ఔటింగ్ కి" : "ఇంటికి",
-        ];
+        
+        if (updatedRequest.type === "PERMISSION") {
+          variables = [
+            gender + " " + teluguName,
+            formatDate.formatDate(updatedRequest.date),
+            formatDate.formatTime(updatedRequest.fromTime),
+            formatDate.formatDate(updatedRequest.date),
+            formatDate.formatTime(updatedRequest.toTime),
+            "ఔటింగ్ కి",
+          ];
+        } else if (updatedRequest.type === "LEAVE") {
+          variables = [
+            gender + " " + teluguName,
+            formatDate.formatDate(updatedRequest.fromDate),
+            formatDate.formatTime(updatedRequest.fromDate),
+            formatDate.formatDate(updatedRequest.toDate),
+            formatDate.formatTime(updatedRequest.toDate),
+            "ఇంటికి",
+          ];
+        }
 
+        // console.log(variables)
         // Send SMS notification
         await sendSMS(
           phoneNumber,
@@ -83,7 +96,7 @@ exports.approveRequest = async (req, res) => {
     }
   } catch (error) {
     console.error("Error approving request:", error);
-    return res.status(500).json({ message: "Server error" });
+    return res.status(500).json({updated:false, message: "Server error" });
   }
 };
 

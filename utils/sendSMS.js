@@ -41,7 +41,7 @@ const sendSMS = async (phoneNumber, templateId, messageTemplate, variables) => {
 
     // Check for specific error messages in the response
     if (response.data.includes("error")) {
-      // console.error("SMS API returned an error:", response.data);
+      console.error("SMS API returned an error:", response.data);
       return {
         success: false,
         message: "SMS API returned an error",
