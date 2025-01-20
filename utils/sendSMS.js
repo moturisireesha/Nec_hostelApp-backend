@@ -15,7 +15,9 @@ const sendSMS = async (phoneNumber, templateId, messageTemplate, variables) => {
     .replace("{#var2#}", variables[1])
     .replace("{#var3#}", variables[2])
     .replace("{#var4#}", variables[3])
-    .replace("{#var5#}", variables[4]);
+    .replace("{#var5#}", variables[4])
+    .replace("{#var6#}", variables[5]);
+;
   // console.log(message);
 
   // Construct the URL for the API request

@@ -44,48 +44,32 @@ exports.approveRequest = async (req, res) => {
     if (hosteler.lastRequest.status === "ACCEPTED") {
       if (hosteler) {
         const phoneNumber = hosteler.parentPhoneNo;
-        let messageTemplate = OUTGOING_MSG;
-        let variables = [];
-
-        // Determine gender based on request ID prefix (BH for boys, GH for girls)
         const gender = updatedRequest.id.startsWith("BH")
           ? "అబ్బాయి"
           : "అమ్మాయి";
 
-        // Translate the hosteler's name to Telugu
+        // Translate hosteler name to Telugu
         const teluguNameResponse = await axios.get(
           `https://api.mymemory.translated.net/get?q=${hosteler.name}&langpair=en|te`
         );
         const teluguName = teluguNameResponse.data.responseData.translatedText;
 
-        if (updatedRequest.type === "PERMISSION") {
-          variables = [
-            gender,
-            teluguName,
-            formatDate.formatDate(updatedRequest.date),
-            formatDate.formatTime(updatedRequest.fromTime),
-            formatDate.formatDate(updatedRequest.date),
-            formatDate.formatTime(updatedRequest.toTime),
-          ];
-        } else if (updatedRequest.type === "LEAVE") {
-          variables = [
-            gender,
-            teluguName,
-            formatDate.formatDate(updatedRequest.fromDate),
-            formatDate.formatTime(updatedRequest.fromDate),
-            formatDate.formatDate(updatedRequest.toDate),
-            formatDate.formatTime(updatedRequest.toDate),
-          ];
-        }
+        const variables = [
+          gender + " " + teluguName,
+          formatDate.formatDate(updatedRequest.date || updatedRequest.fromDate),
+          formatDate.formatTime(updatedRequest.fromTime),
+          formatDate.formatDate(updatedRequest.date || updatedRequest.toDate),
+          formatDate.formatTime(updatedRequest.toTime),
+          updatedRequest.type === "PERMISSION" ? "ఔటింగ్ కి" : "ఇంటికి",
+        ];
 
         // Send SMS notification
         await sendSMS(
           phoneNumber,
           OUTGOING_TEMPLATE_ID,
-          messageTemplate,
+          OUTGOING_MSG,
           variables
         );
-
         return res
           .status(200)
           .json({ updated: true, message: "Notified to parent" });
@@ -112,48 +96,45 @@ exports.arriveRequest = async (req, res) => {
       req.body,
       { new: true }
     );
-    // console.log(updatedRequest);
+
     if (!updatedRequest) {
       return res.status(404).json({ message: "Request not found" });
     }
 
     const hosteler = await Hosteler.findOne({ rollNo: updatedRequest.rollNo });
+
     if (hosteler) {
       const phoneNumber = hosteler.parentPhoneNo;
-      const messageTemplate = RETURN_MSG;
-
-      // Determine gender based on hostel type
       const gender = updatedRequest.id.startsWith("BH") ? "అబ్బాయి" : "అమ్మాయి";
 
-      teluguName = await axios.get(
+      // Translate hosteler name to Telugu
+      const teluguNameResponse = await axios.get(
         `https://api.mymemory.translated.net/get?q=${hosteler.name}&langpair=en|te`
       );
-      // console.log(teluguName);
-      // console.log(teluguName.data.responseData.translatedText);
+      const teluguName = teluguNameResponse.data.responseData.translatedText;
+
       const variables = [
-        gender,
-        teluguName.data.responseData.translatedText,
+        gender + " " + teluguName,
         formatDate.formatDate(updatedRequest.arrived.time),
         formatDate.formatTime(updatedRequest.arrived.time),
+        "ఔటింగ్",
       ];
 
-      await sendSMS(
-        phoneNumber,
-        RETURN_TEMPLATE_ID,
-        messageTemplate,
-        variables
-      );
+      // Send SMS notification
+      await sendSMS(phoneNumber, RETURN_TEMPLATE_ID, RETURN_MSG, variables);
+
       return res
         .status(200)
-        .json({ updated: true, message: "notified to parent" });
+        .json({ updated: true, message: "Notified to parent" });
     } else {
       return res.status(404).send("Hosteler not found");
     }
   } catch (error) {
-    // console.error("Error approving request:", error);
-    return res.json({ message: "Server error" });
+    console.error("Error approving request:", error);
+    return res.status(500).json({ message: "Server error" });
   }
 };
+
 
 
 // Update a request by ID
