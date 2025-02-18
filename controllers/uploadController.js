@@ -9,7 +9,7 @@ const convertDate = (dateString) => {
 
 // add  Hostlers data through excel file
 exports.addHostelers = async (req, res) => {
-
+  // console.log(req.body)
   if (!Array.isArray(req.body) || req.body.length === 0) {
     return res.status(400).send("Invalid data format or empty array.");
   }
@@ -30,6 +30,8 @@ exports.addHostelers = async (req, res) => {
         data.dob = null; // Handle invalid dates appropriately
       }
     }
+
+      // console.log(processedData);
 
 
     // Ensure field names match the schema
@@ -68,10 +70,13 @@ exports.addHostelers = async (req, res) => {
       (data) => !existingRollNoSet.has(data.rollNo)
     );
 
-    // console.log(uniqueData);
+    console.log("uniqueData")
+    console.log(uniqueData.length);
+    console.log(uniqueData)
 
     // Insert only the unique records
     const result = await Hosteler.insertMany(uniqueData, { ordered: false }); // Use ordered: false to continue on duplicate errors
+    // console.log(result)
     res.status(200).send({added:true,message:`${result.length} records inserted successfully`});
   } catch (err) {
     console.error("Error inserting data: ", err);
