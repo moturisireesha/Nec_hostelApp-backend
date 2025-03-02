@@ -9,7 +9,7 @@ const hostelersSchema = new mongoose.Schema({
    year:Number,
    branch:String,
    gender:String,
-   dob:{ type: Date},
+   // dob:{ type: Date},
    phoneNo: { type: String, required: true },
    email: String,
    parentName: String,
