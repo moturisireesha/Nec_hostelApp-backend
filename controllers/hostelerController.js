@@ -7,26 +7,42 @@ const { forgotPassword } = require('./hostlerCredentialsController');
 
 // CREATE SECTION
 // Create a new hosteler
+// Controller function to create hosteler
+
 exports.createHosteler = async (req, res) => {
-    try {
-        const { rollNo } = req.body;
+  try {
+    const { rollNo } = req.body;
 
-        // Check if the hosteler already exists by rollNo
-        const existingHosteler = await Hosteler.findOne({ rollNo });
-        if (existingHosteler) {
-            return res.json({ isExisted: true, success: false, message: `Hosteler with roll number ${rollNo} already exists.` });
-        }
-
-        // Create the hosteler
-        const hosteler = new Hosteler(req.body);
-        await hosteler.save();
-
-        // Respond with the created hosteler
-        res.status(201).json({ isExisted: false, success: true, message:"Student Added Successfully!" });
-    } catch (error) {
-        res.json({ isExisted:false,success: false, message: error.message });
+    // Check if the hosteler already exists by rollNo
+    const existingHosteler = await Hosteler.findOne({ rollNo });
+    if (existingHosteler) {
+      return res.status(400).json({
+        isExisted: true,
+        success: false,
+        message: `Hosteler with roll number ${rollNo} already exists.`,
+      });
     }
+
+    // Create the hosteler
+    const hosteler = new Hosteler(req.body);
+    await hosteler.save();
+
+    // Respond with the created hosteler
+    res.status(201).json({
+      isExisted: false,
+      success: true,
+      message: "Student Added Successfully!",
+    });
+  } catch (error) {
+    res.status(500).json({
+      isExisted: false,
+      success: false,
+      message: "An error occurred while adding the student.",
+      error: error.message,
+    });
+  }
 };
+
 
 
 // VERIFY SECTION

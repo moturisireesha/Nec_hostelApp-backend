@@ -73,7 +73,7 @@ exports.login = async (req, res) => {
       return res.json({ success: false, message: "Invalid username or password" });
     }
 
-    res.status(200).json({ success: true, message: "Successfully logged in" });
+    res.status(200).json({ success: true, message: "Successfully logged in",token });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

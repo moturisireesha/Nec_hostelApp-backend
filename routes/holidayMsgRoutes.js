@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const holidayMsgController = require("../controllers/HolidayMsgController");
+const authenticateUser = require("../middleware/auth");
 
 // Routes for CRUD operations
-router.post("/create", holidayMsgController.createHolidayMsg);
+router.post("/create", authenticateUser, holidayMsgController.createHolidayMsg);
 router.get("/all", holidayMsgController.getHolidayMsgs);
 router.delete("/delete/:id", holidayMsgController.deleteHolidayMsg);
 

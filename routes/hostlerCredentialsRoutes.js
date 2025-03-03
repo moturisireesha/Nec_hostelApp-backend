@@ -15,4 +15,5 @@ router.post('/verifyOTP',hostlerCredentialsController.verifyOtp) //verify the ot
 
 
 
+
 module.exports = router;

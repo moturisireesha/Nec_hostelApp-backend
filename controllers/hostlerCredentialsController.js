@@ -97,7 +97,7 @@ exports.login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, hostler.password);
         if (!isMatch) return res.json({ message: 'Invalid Roll Number or Password' });
 
-        const token = jwt.sign({ id: hostler._id, rollNo: hostler.rollNo }, 'your_jwt_secret', { expiresIn: '1m' });
+        const token = jwt.sign({ id: hostler._id, rollNo: hostler.rollNo }, 'nec_hostel_app', { expiresIn: '30m' });
         res.status(200).json({success:true, token });
     } catch (error) {
         res.json({ message: error.message });
