@@ -4,7 +4,7 @@ const router = express.Router();
 const hostelerController = require('../controllers/hostelerController');
 const authenticateUser = require("../middleware/auth");
 
-router.post('/create', hostelerController.createHosteler); // adding student details through admin
+router.post('/create',authenticateUser, hostelerController.createHosteler); // adding student details through admin
 router.get('/verify/:RollNo',hostelerController.verifyStudent) //it is used  in forgot password to verify student
 router.get('/register/:RollNo',hostelerController.verifyRegisterStudent) //verifying student exist or not in regestration
 router.get('/:RollNo',authenticateUser, hostelerController.getHostelerByRollNo);//get student details by RollNo 

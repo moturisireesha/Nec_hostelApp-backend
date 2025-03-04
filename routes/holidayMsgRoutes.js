@@ -9,6 +9,6 @@ router.get("/all", holidayMsgController.getHolidayMsgs);
 router.delete("/delete/:id", holidayMsgController.deleteHolidayMsg);
 
 // Route to send holiday messages
-router.post("/send", holidayMsgController.sendHolidayMsgs);
+router.post("/send",authenticateUser, holidayMsgController.sendHolidayMsgs);
 
 module.exports = router;

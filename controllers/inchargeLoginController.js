@@ -43,7 +43,7 @@ exports.login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, incharge.password);
         if (!isMatch) return res.json({ message: 'Invalid Employee ID or Password' });
 
-        const token = jwt.sign({ id: incharge._id, eid: incharge.eid }, 'your_jwt_secret', { expiresIn: '1h' });
+        const token = jwt.sign({ id: incharge._id, eid: incharge.eid }, 'nec_hostel_app', { expiresIn: '1h' });
         res.status(200).json({success:true, token });
     } catch (error) {
         res.json({ message: error.message });

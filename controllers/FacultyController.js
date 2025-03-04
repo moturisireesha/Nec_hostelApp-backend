@@ -75,7 +75,7 @@ exports.login = async (req, res) => {
 
     const token = jwt.sign(
       { id: faculty._id, username: faculty.username },
-      process.env.JWT_SECRET || "your_secret_key",
+      process.env.JWT_SECRET || "nec_hostel_app",
       { expiresIn: "30m" }
     );
 

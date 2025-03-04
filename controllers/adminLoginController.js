@@ -51,9 +51,9 @@ exports.login = async (req, res) => {
         if (!isMatch) return res.json({ message: 'Invalid username or password' });
         
         // const payload = ;
-        const token = jwt.sign( { id: admin._id,eid:admin.eid},'your_jwt_secret', { expiresIn: '1h' });
+        const token = jwt.sign( { id: admin._id,eid:admin.eid},'nec_hostel_app', { expiresIn: '1h' });
         try {
-            const decoded = jwt.verify(token, 'your_jwt_secret');
+            const decoded = jwt.verify(token, 'nec_hostel_app');
             // console.log(decoded)
             // res.status(200).json({ success: true, decoded });
         } catch (error) {

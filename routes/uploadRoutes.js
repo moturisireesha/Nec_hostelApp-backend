@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const { addHostelers } = require('../controllers/uploadController');
+const authenticateUser = require('../middleware/auth')
 
 const router = express.Router();
 
@@ -17,6 +18,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Route to handle file upload
-router.post('/addStudents',addHostelers ); //upload array of students details
+router.post('/addStudents',authenticateUser ,addHostelers ); //upload array of students details
 
 module.exports = router;
