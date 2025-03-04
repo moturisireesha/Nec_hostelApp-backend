@@ -9,4 +9,5 @@ router.post("/add-log",authenticateUser , logsController.addLog); //add the log
 router.post("/getLogs",authenticateUser , logsController.getLogsByDate); // get logs based on selected date
 router.delete("/delete-logs",authenticateUser ,logsController.deleteOldLogs)
 
+
 module.exports = router;
