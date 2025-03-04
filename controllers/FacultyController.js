@@ -59,21 +59,27 @@ exports.updateFaculty = async (req, res) => {
   }
 };
 
+
+
 // Faculty login
+const jwt = require("jsonwebtoken");
+
 exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
     const faculty = await Faculty.findOne({ username });
 
-    if (!faculty) {
-      return res.json({ success: false, message: "Faculty not found" });
+    if (!faculty || faculty.password !== password) {
+      return res.status(401).json({ success: false, message: "Invalid Username or Password" });
     }
 
-    if (password !== faculty.password) {
-      return res.json({ success: false, message: "Invalid username or password" });
-    }
+    const token = jwt.sign(
+      { id: faculty._id, username: faculty.username },
+      process.env.JWT_SECRET || "your_secret_key",
+      { expiresIn: "30m" }
+    );
 
-    res.status(200).json({ success: true, message: "Successfully logged in",token });
+    res.status(200).json({ success: true, message: "Login successful", token });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
