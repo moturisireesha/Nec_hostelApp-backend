@@ -22,14 +22,14 @@ exports.addHostelers = async (req, res) => {
   // Process each record
   const processedData = validData.map((data) => {
     // Convert date if present
-    if (data.dob) {
-      try {
-        data.dob = convertDate(data.dob);
-      } catch (error) {
-        console.error(`Error converting date: ${data.dob}`);
-        data.dob = null; // Handle invalid dates appropriately
-      }
-    }
+    // if (data.dob) {
+    //   try {
+    //     data.dob = convertDate(data.dob);
+    //   } catch (error) {
+    //     console.error(`Error converting date: ${data.dob}`);
+    //     data.dob = null; // Handle invalid dates appropriately
+    //   }
+    // }
 
       // console.log(processedData);
 
@@ -43,9 +43,9 @@ exports.addHostelers = async (req, res) => {
       year: data.year,
       branch: data.branch.toUpperCase(),
       gender: data.gender.toUpperCase(),
-      dob: data.dob,
       phoneNo: data.phoneNo,
       email: data.email,
+      roomNo:data.roomNo,
       parentName: data.parentName,
       parentPhoneNo: data.parentPhoneNo,
       currentStatus: data.currentStatus || "HOSTEL",
