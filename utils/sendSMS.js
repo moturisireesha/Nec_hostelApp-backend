@@ -18,7 +18,8 @@ const sendSMS = async (phoneNumber, templateId, messageTemplate, variables) => {
     .replace("{#var5#}", variables[4])
     .replace("{#var6#}", variables[5]);
 ;
-  // console.log(message);
+console.log(variables);
+  console.log(message);
 
   // Construct the URL for the API request
   const url = `http://onlinebulksmslogin.com/v3/api.php?username=${encodeURIComponent(
